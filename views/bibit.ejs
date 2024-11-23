@@ -18,7 +18,9 @@
     <ul>
         <% data.forEach(item=> { %>
             <li>
-                <%= item.nama %> (<%= item.jenis %> - harga: <%= item.harga %>)
+                <%= item.nama %>
+                    <%= item.jenis %>
+                        <%= item.harga %>
                             <a href="/bibit/delete/<%= item.id %>">Hapus</a>
 
                             <form action="/bibit/update/<%= item.id %>" method="POST" style="display: inline;">

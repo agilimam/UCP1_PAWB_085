@@ -3,55 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Pupuk</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Kelola pupuk</title>
 </head>
 
-<body class="bg-light">
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Kelola Pupuk</h1>
-        
-        <!-- Form untuk menambah pupuk -->
-        <form action="/pupuk/add" method="POST" class="bg-white p-4 rounded shadow-sm mb-4">
-            <div class="mb-3">
-                <label for="Nama" class="form-label">Nama Pupuk</label>
-                <input type="text" class="form-control" id="Nama" name="Nama" placeholder="Nama pupuk" required>
-            </div>
-            <div class="mb-3">
-                <label for="Jenis" class="form-label">Jenis Pupuk</label>
-                <input type="text" class="form-control" id="Jenis" name="Jenis" placeholder="Jenis">
-            </div>
-            <div class="mb-3">
-                <label for="Harga" class="form-label">Harga</label>
-                <input type="number" class="form-control" id="Harga" name="Harga" placeholder="Harga">
-            </div>
-            <button type="submit" class="btn btn-success w-100">Tambah</button>
-        </form>
+<body>
+    <h1>Kelola Pupuk</h1>
+    <form action="/pupuk/add" method="POST">
+        <input type="text" name="Nama" placeholder="Nama Pupuk" required>
+        <input type="text" name="Jenis" placeholder="Jenis">
+        <input type="number" name="Harga" placeholder="Harga">
+        <button type="submit">Tambah</button>
+    </form>
 
-        <!-- Daftar pupuk -->
-        <ul class="list-group">
-            <% data.forEach(item => { %>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span><%= item.nama %> (<%= item.jenis %> - harga: <%= item.harga %>)</span>
-                    <div>
-                        <a href="/pupuk/delete/<%= item.id %>" class="btn btn-danger btn-sm me-2">Hapus</a>
-                        <form action="/bibit/update/<%= item.id %>" method="POST" class="d-inline">
-                            <input type="text" class="form-control form-control-sm" name="Nama" value="<%= item.Nama %>" required>
-                            <input type="text" class="form-control form-control-sm mt-1" name="Jenis" value="<%= item.Jenis %>">
-                            <input type="number" class="form-control form-control-sm mt-1" name="Harga" value="<%= item.Harga %>">
-                            <button type="submit" class="btn btn-warning btn-sm mt-2 w-100">Update</button>
-                        </form>
-                    </div>
-                </li>
+    <ul>
+        <% data.forEach(item=> { %>
+            <li>
+                <%= item.nama %>
+                    <%= item.jenis %>
+                        <%= item.harga %>
+                            <a href="/pupuk/delete/<%= item.id %>">Hapus</a>
+
+                            <form action="/pupuk/update/<%= item.id %>" method="POST" style="display: inline;">
+                                <input type="text" name="Nama" value="<%= item.Nama %>" required>
+                                <input type="text" name="Jenis" value="<%= item.Jenis %>">
+                                <input type="number" name="Harga" value="<%= item.Harga %>">
+                                <button type="submit">Update</button>
+                            </form>
+            </li>
             <% }) %>
-        </ul>
-    </div>
-
-    <!-- Bootstrap JS (opsional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-KJ3o2DKtIkvYIKBwpvWzYdPRa9dDwxi13t2O59nU5Gy5yybmC1eUgnDs7RIb4TVo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cuLnrp68ym78uhYjbpuYYitUz0Gg+l6VYfwq9BfyyU9F6RQ0HngnFbd7Vq/sa+d7" crossorigin="anonymous"></script>
+    </ul>
 </body>
 
 </html>
