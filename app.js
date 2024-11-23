@@ -1,20 +1,47 @@
-require('dotenv').config();
+require('dotenv').config();  // Pastikan dotenv hanya dipanggil sekali
+const mysql = require('mysql');
 const express = require('express');
-const app = express();
-const port = process.env.PORT;
+const bodyParser = require('body-parser');
+const pupukRoutes = require('./routes/pupukdb.js');
+const bibitRoutes = require('./routes/bibitdb.js');
+const path = require('path');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Middleware untuk parsing form data
-app.set("view engine", "ejs");
+// Membuat koneksi ke database
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'pertanian'
+});
+
+// Menghubungkan ke database
+connection.connect((err) => {
+    if (err) {
+        console.log('Error connecting to the database: ', err);
+        return;
+    }
+    console.log('Connected to the database!');
+});
+
+
+const app = express();
+
+// Atur lokasi folder views
+app.set('views', path.join(__dirname, 'views'));
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
 
 // Routes
-app.get("/", (req, res) => {
-    res.render("index");
-});
+app.use('/pupuk', pupukRoutes);
+app.use('/bibit', bibitRoutes);
 
-const contactRoutes = require('./routes/Pertaniandb'); // Pastikan path benar
-app.use('/', contactRoutes);
+// Home
+app.get('/', (req, res) => res.render('index'));
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// Server
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+
+
+module.exports = connection;
