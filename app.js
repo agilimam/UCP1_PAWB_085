@@ -1,47 +1,34 @@
-require('dotenv').config();  // Pastikan dotenv hanya dipanggil sekali
-const mysql = require('mysql');
-const express = require('express');
-const bodyParser = require('body-parser');
-const pupukRoutes = require('./routes/pupukdb.js');
-const bibitRoutes = require('./routes/bibitdb.js');
-const path = require('path');
 
-// Membuat koneksi ke database
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'pertanian'
-});
-
-// Menghubungkan ke database
-connection.connect((err) => {
-    if (err) {
-        console.log('Error connecting to the database: ', err);
-        return;
-    }
-    console.log('Connected to the database!');
-});
-
-
+const express = require("express");
+const bodyParser = require("body-parser");
+const routesbibit = require("./routes/bibitdb");  // Periksa apakah jalur file benar
+const routespupuk = require("./routes/pupukdb");  // Periksa apakah jalur file benar
 const app = express();
+const PORT = process.env.PORT || 3000;
+const path = require("path");
 
-// Atur lokasi folder views
-app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static("public"));
+
+// View engine setup
+
+app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'));
 
 // Routes
-app.use('/pupuk', pupukRoutes);
-app.use('/bibit', bibitRoutes);
+app.use("/bibit", routesbibit);  // Routes for bibit
+app.use("/pupuk", routespupuk);  // Routes for pupuk
 
-// Home
-app.get('/', (req, res) => res.render('index'));
+// Home route
+app.get("/", (req, res) => {
+    res.render("index", { title: "Halaman Utama Pertanian" });
+});
 
-// Server
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
-
-
-module.exports = connection;
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
